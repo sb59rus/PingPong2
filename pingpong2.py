@@ -1,6 +1,7 @@
 from pygame import *
 from random import randint
 from time import time as timer
+
 #класс-родитель для спрайтов
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, w, h, player_x, player_y, player_speed):
@@ -15,30 +16,38 @@ class GameSprite(sprite.Sprite):
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
-class Player(GameSprite):
+class Player1(GameSprite):
     def update(self):
         key_pressed = key.get_pressed()
-        if key_pressed[K_LEFT] and self.rect.x>5:
-            self.rect.x-=self.speed 
-        if key_pressed[K_RIGHT] and self.rect.x<715:
-            self.rect.x+=self.speed 
-    def fire(self):
-        bullet = Bullet('bullet.png', 15, 20, self.rect.centerx, self.rect.top, 10)
-        bullets.add(bullet)
-        shot.play()
+        if key_pressed[K_w] and self.rect.y>0:
+            self.rect.y-=self.speed 
+        if key_pressed[K_s] and self.rect.y<450:
+            self.rect.y+=self.speed 
 
-#Игровая сцена:
-window = display.set_mode((800, 600))
-display.set_caption("SpaceShooter")
-background = transform.scale(image.load("galaxy.jpg"), (800, 600))
+class Player2(GameSprite):
+    def update(self):
+        key_pressed = key.get_pressed()
+        if key_pressed[K_UP] and self.rect.y>0:
+            self.rect.y-=self.speed 
+        if key_pressed[K_DOWN] and self.rect.y<450:
+            self.rect.y+=self.speed 
 
 #переменные
+ball = 'ball.png'
+racket = 'racket.png'
 finish = False
 run = True
 clock = time.Clock()
+white = (255,255,255)
+
+#Игровая сцена:
+window = display.set_mode((1200, 600))
+display.set_caption("PingPong")
+window.fill(white)
 
 #создание спрайтов
-space_ship = Player('rocket.png', 80, 100, 380, 495, 5)
+racket1 = Player1(racket, 40, 150, 10, 250, 5)
+racket2 = Player2(racket, 40, 150, 1150, 250, 5)
 
 #музыка
 '''mixer.init()
@@ -57,6 +66,10 @@ while run:
             run = False
 
     if not(finish):
-        
+        window.fill(white)
+        racket1.update()
+        racket2.update()
+        racket1.reset()
+        racket2.reset()
     display.update()
     clock.tick(60)
