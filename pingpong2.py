@@ -9,6 +9,8 @@ class GameSprite(sprite.Sprite):
         # каждый спрайт должен хранить свойство image - изображение
         self.image = transform.scale(image.load(player_image), (w, h))
         self.speed = player_speed
+        self.speed_x = player_speed
+        self.speed_y = player_speed
         # каждый спрайт должен хранить свойство rect - прямоугольник, в который он вписан
         self.rect = self.image.get_rect()
         self.rect.x = player_x
@@ -32,6 +34,11 @@ class Player2(GameSprite):
         if key_pressed[K_DOWN] and self.rect.y<450:
             self.rect.y+=self.speed 
 
+class Ball(GameSprite):
+    def update(self):
+        self.rect.x+=self.speed_x
+        self.rect.y+=self.speed_y
+
 #переменные
 ball = 'ball.png'
 racket = 'racket.png'
@@ -48,6 +55,7 @@ window.fill(white)
 #создание спрайтов
 racket1 = Player1(racket, 40, 150, 10, 250, 5)
 racket2 = Player2(racket, 40, 150, 1150, 250, 5)
+ball = Ball(ball, 50, 50, 575, 275, 5)
 
 #музыка
 '''mixer.init()
@@ -71,5 +79,7 @@ while run:
         racket2.update()
         racket1.reset()
         racket2.reset()
+        ball.update()
+        ball.reset()
     display.update()
     clock.tick(60)
